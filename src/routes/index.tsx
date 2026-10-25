@@ -218,11 +218,12 @@ export function Index() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="grid gap-8 px-6 py-12 md:grid-cols-[1fr_1.4fr_auto] md:px-12">
+      <section id="faq" className="grid gap-8 px-6 py-12 md:grid-cols-[1fr_1.4fr] md:px-12">
         <div>
           <p className="eyebrow">FAQ</p>
           <h2 className="mt-2 text-2xl font-semibold md:text-3xl">Dúvidas Frequentes</h2>
           <p className="mt-2 text-xs text-muted-foreground">Aqui estão as principais dúvidas sobre o meu trabalho.</p>
+          <div className="mt-6"><WhatsBtn /></div>
         </div>
         <div className="space-y-2">
           {faqs.map(([q, a], i) => (
@@ -234,7 +235,6 @@ export function Index() {
             </div>
           ))}
         </div>
-        <div className="h-fit self-center"><WhatsBtn /></div>
       </section>
 
       {/* FOOTER */}
