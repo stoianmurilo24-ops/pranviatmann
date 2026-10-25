@@ -149,7 +149,7 @@ export function Index() {
             <h2 className="mt-2 text-2xl font-semibold md:text-3xl">Nossos Serviços</h2>
             <p className="mt-2 max-w-xs text-xs text-muted-foreground">Cada momento é único. Por isso, ofereço um olhar especial para cada tipo de registro.</p>
           </div>
-          <a href={WA} className="inline-flex shrink-0 items-center gap-2 rounded-full border px-3 py-1 text-[0.6rem]">Ver todos os serviços <ArrowRight className="h-3 w-3" /></a>
+          <a href="https://wa.me/5513991158252?text=Ol%C3%A1!%20Gostaria%20de%20conhecer%20os%20servi%C3%A7os%20dispon%C3%ADveis%20e%20saber%20mais%20sobre%20as%20op%C3%A7%C3%B5es%20e%20os%20valores." target="_blank" rel="noreferrer" className="inline-flex shrink-0 items-center gap-2 rounded-full border px-3 py-1 text-[0.6rem]">Ver todos os serviços <ArrowRight className="h-3 w-3" /></a>
         </div>
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           {services.map(([t, s, img]) => (
