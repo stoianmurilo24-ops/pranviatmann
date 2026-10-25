@@ -166,7 +166,7 @@ export function Index() {
 
       {/* SOBRE */}
       <section id="sobre" className="relative grid border-t md:grid-cols-2">
-        <div className="order-2 flex items-end justify-center bg-gradient-to-b from-secondary to-background md:order-1">
+        <div className="order-2 flex items-end justify-center bg-background md:order-1">
           <img src={tavares} alt="Tavares Pranviatmann" className="h-72 object-contain md:h-96" />
         </div>
         <div className="order-1 px-6 py-12 md:order-2 md:px-12 md:py-16">
