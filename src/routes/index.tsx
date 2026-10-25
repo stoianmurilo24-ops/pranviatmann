@@ -5,13 +5,6 @@ import {
   Plus, Menu, X, Instagram, MessageCircle,
 } from "lucide-react";
 import tavares from "@/assets/tavares.png";
-import p1 from "@/assets/p1.png.asset.json";
-import p2 from "@/assets/p2.png.asset.json";
-import p3 from "@/assets/p3.webp.asset.json";
-import p4 from "@/assets/p4.webp.asset.json";
-import p5 from "@/assets/p5.webp.asset.json";
-import p6 from "@/assets/p6.webp.asset.json";
-import p7 from "@/assets/p7.webp.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -29,7 +22,15 @@ export const Route = createFileRoute("/")({
 
 const WA = "https://wa.me/5513991158252";
 const IG = "https://www.instagram.com/pranviatmann";
-const photos = [p1, p2, p3, p4, p5, p6, p7].map((p) => p.url);
+const photos = [
+  "/images/p1.webp",
+  "/images/p2.webp",
+  "/images/p3.webp",
+  "/images/p4.webp",
+  "/images/p5.webp",
+  "/images/p6.webp",
+  "/images/p7.webp",
+];
 
 function Logo({ small }: { small?: boolean }) {
   return (
