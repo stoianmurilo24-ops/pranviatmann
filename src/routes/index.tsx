@@ -23,13 +23,13 @@ export const Route = createFileRoute("/")({
 const WA = "https://wa.me/5513991158252";
 const IG = "https://www.instagram.com/pranviatmann";
 const photos = [
-  "/images/p1.webp",
-  "/images/p2.webp",
-  "/images/p3.webp",
-  "/images/p4.webp",
-  "/images/p5.webp",
-  "/images/p6.webp",
-  "/images/p7.webp",
+  "/images/p1.png",
+  "/images/p2.png",
+  "/images/p3.png",
+  "/images/p4.png",
+  "/images/p5.png",
+  "/images/p6.png",
+  "/images/p7.png",
 ];
 
 function Logo({ small }: { small?: boolean }) {
