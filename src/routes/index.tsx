@@ -122,7 +122,7 @@ export function Index() {
         <div className="hero-fade absolute inset-0 z-10" />
         <div className="relative z-20 max-w-[64%] px-6 pt-28 md:max-w-[55%] md:px-12 md:pt-32 lg:max-w-none lg:pt-36">
           <p className="eyebrow">Registros que contam histórias</p>
-          <h1 className="mt-3 text-3xl font-semibold leading-[1.05] sm:text-4xl md:text-5xl">
+          <h1 className="mt-3 text-2xl font-semibold leading-[1.05] sm:text-4xl md:text-5xl">
             Tavares<br />Pranviatmann<br /><span className="text-primary">Santos - SP</span>
           </h1>
           <p className="mt-4 max-w-xs text-sm text-foreground/85">
