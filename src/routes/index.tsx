@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   Camera, Star, Heart, ShieldCheck, ArrowRight, ChevronLeft, ChevronRight,
-  Plus, Menu, X, Instagram, Youtube, MessageCircle,
+  Plus, Menu, X, Instagram, MessageCircle,
 } from "lucide-react";
 import tavares from "@/assets/tavares.png";
 import p1 from "@/assets/p1.png.asset.json";
@@ -27,7 +27,8 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const WA = "https://wa.me/5513999999999";
+const WA = "https://wa.me/5513991158252";
+const IG = "https://www.instagram.com/pranviatmann";
 const photos = [p1, p2, p3, p4, p5, p6, p7].map((p) => p.url);
 
 function Logo({ small }: { small?: boolean }) {
@@ -108,19 +109,18 @@ function Index() {
       <section id="inicio" className="relative min-h-[640px] md:min-h-[600px]">
         <div className="absolute inset-0">
           {[
-            [photos[4], "left-[38%] top-[14%] w-40 -rotate-12", "hidden md:block"],
-            [photos[5], "right-0 top-[8%] w-36 rotate-12", ""],
-            [photos[6], "right-[12%] top-[30%] w-36 -rotate-6", ""],
-            [photos[3], "right-[-2%] top-[46%] w-40 rotate-6", "hidden md:block"],
-            [photos[4], "left-[6%] top-[14%] w-28 -rotate-12", "md:hidden"],
-            [photos[2], "left-[30%] top-[62%] w-28 rotate-3 opacity-60", "hidden md:block"],
-          ].map(([src, pos, vis], i) => (
-            <img key={i} src={src} alt="" className={`absolute aspect-[4/5] rounded-sm object-cover opacity-70 shadow-2xl ${pos} ${vis}`} />
+            [photos[4], "left-[38%] top-[14%] w-40 -rotate-12"],
+            [photos[5], "right-0 top-[8%] w-36 rotate-12"],
+            [photos[6], "right-[12%] top-[30%] w-36 -rotate-6"],
+            [photos[3], "right-[-2%] top-[46%] w-40 rotate-6"],
+            [photos[2], "left-[30%] top-[62%] w-28 rotate-3 opacity-60"],
+          ].map(([src, pos], i) => (
+            <img key={i} src={src} alt="" className={`absolute hidden aspect-[4/5] rounded-sm object-cover opacity-70 shadow-2xl md:block ${pos}`} />
           ))}
         </div>
-        <img src={tavares} alt="Tavares Pranviatmann" className="absolute bottom-0 left-1/2 z-10 h-[52%] -translate-x-1/2 object-contain md:left-[55%] md:h-[88%]" />
+        <img src={tavares} alt="Tavares Pranviatmann" className="absolute top-14 left-1/2 z-10 h-[340px] w-auto -translate-x-1/2 object-contain md:top-auto md:bottom-0 md:left-[55%] md:h-[88%]" />
         <div className="hero-fade absolute inset-0 z-10" />
-        <div className="relative z-20 px-6 pt-[340px] md:px-12 md:pt-36">
+        <div className="relative z-20 px-6 pt-[400px] md:px-12 md:pt-36">
           <p className="eyebrow">Registros que contam histórias</p>
           <h1 className="mt-3 text-4xl font-semibold leading-[1.05] md:text-5xl">
             Tavares<br />Pranviatmann<br /><span className="text-primary">Santos - SP</span>
@@ -186,14 +186,14 @@ function Index() {
             <h2 className="mt-2 text-2xl font-semibold md:text-3xl">Galeria</h2>
             <p className="mt-2 max-w-xs text-xs text-muted-foreground">Alguns registros que mostram o meu olhar sobre cada história.</p>
           </div>
-          <div className="flex gap-2">
+          <div className="hidden gap-2 md:flex">
             <button aria-label="Anterior" onClick={() => setG((g - 1 + photos.length) % photos.length)} className="grid h-7 w-7 place-items-center rounded-full border"><ChevronLeft className="h-3.5 w-3.5" /></button>
             <button aria-label="Próximo" onClick={() => setG((g + 1) % photos.length)} className="grid h-7 w-7 place-items-center rounded-full border"><ChevronRight className="h-3.5 w-3.5" /></button>
           </div>
         </div>
-        <div className="mt-8 grid grid-cols-3 gap-3 md:grid-cols-4">
-          {gallery.map((src, i) => (
-            <img key={src + i} src={src} alt="Trabalho fotográfico" className={`aspect-[3/4] w-full rounded-sm object-cover md:aspect-[4/3] ${i === 3 ? "hidden md:block" : ""}`} />
+        <div className="no-scrollbar -mx-6 mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-3 md:mx-0 md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:px-0 md:pb-0">
+          {photos.map((src) => (
+            <img key={src} src={src} alt="Trabalho fotográfico" className={`aspect-[3/4] w-[58%] shrink-0 snap-center rounded-sm object-cover md:aspect-[4/3] md:w-full ${gallery.includes(src) ? "" : "md:hidden"}`} />
           ))}
         </div>
       </section>
@@ -234,7 +234,7 @@ function Index() {
             </div>
           ))}
         </div>
-        <a href={WA} className="h-fit self-start rounded-full border px-3 py-1 text-[0.6rem]">Ver todas as perguntas</a>
+        <div className="h-fit self-start"><WhatsBtn /></div>
       </section>
 
       {/* FOOTER */}
@@ -244,14 +244,13 @@ function Index() {
           <nav className="hidden gap-8 text-[0.65rem] md:flex">
             {nav.map(([l, h]) => <a key={h} href={h}>{l}</a>)}
           </nav>
-          <div className="flex gap-4">
-            <a href="#" aria-label="Instagram"><Instagram className="h-4 w-4" /></a>
-            <a href={WA} aria-label="WhatsApp"><MessageCircle className="h-4 w-4" /></a>
-            <a href="#" aria-label="YouTube"><Youtube className="h-4 w-4" /></a>
+          <div className="flex items-center gap-5">
+            <a href={IG} target="_blank" rel="noreferrer" aria-label="Instagram" className="flex items-center gap-2 hover:text-primary"><Instagram className="h-4 w-4" /><span className="text-[0.65rem]">@pranviatmann</span></a>
+            <a href={WA} target="_blank" rel="noreferrer" aria-label="WhatsApp" className="hover:text-primary"><MessageCircle className="h-4 w-4" /></a>
           </div>
         </div>
         <div className="mt-8 flex justify-between text-[0.6rem] text-muted-foreground">
-          <span>© 2025 Tavares Pranviatmann. Todos os direitos reservados.</span><span>Santos - SP</span>
+          <span>© 2026 Tavares Pranviatmann. Todos os direitos reservados.</span><span>Santos - SP</span>
         </div>
       </footer>
     </div>

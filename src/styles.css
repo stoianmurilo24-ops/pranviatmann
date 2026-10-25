@@ -81,3 +81,9 @@
 @utility card-fade {
   background: linear-gradient(0deg, var(--card) 15%, transparent 65%);
 }
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
