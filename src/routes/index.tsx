@@ -79,7 +79,7 @@ const faqs = [
   ["É possível fazer um pacote personalizado?", "Claro! Montamos o pacote ideal de acordo com a sua necessidade."],
 ];
 
-function Index() {
+export function Index() {
   const [open, setOpen] = useState(false);
   const [faq, setFaq] = useState<number | null>(null);
   const [g, setG] = useState(0);
