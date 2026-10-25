@@ -234,7 +234,7 @@ export function Index() {
             </div>
           ))}
         </div>
-        <div className="h-fit self-start"><WhatsBtn /></div>
+        <div className="h-fit self-center"><WhatsBtn /></div>
       </section>
 
       {/* FOOTER */}
