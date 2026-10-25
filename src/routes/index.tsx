@@ -118,11 +118,11 @@ export function Index() {
             <img key={i} src={src} alt="" className={`absolute hidden aspect-[4/5] rounded-sm object-cover opacity-70 shadow-2xl lg:block ${pos}`} />
           ))}
         </div>
-        <img src={tavares} alt="Tavares Pranviatmann" className="absolute right-[-10%] top-24 z-10 h-[340px] w-auto object-contain sm:right-0 md:top-16 md:h-[520px] lg:top-auto lg:right-auto lg:bottom-0 lg:left-[55%] lg:h-[88%]" />
+        <img src={tavares} alt="Tavares Pranviatmann" className="absolute right-[2%] top-32 z-10 h-[340px] w-auto object-contain sm:top-24 sm:right-[3%] md:top-16 md:right-[4%] md:h-[520px] lg:top-auto lg:right-auto lg:bottom-0 lg:left-[55%] lg:h-[88%]" />
         <div className="hero-fade absolute inset-0 z-10" />
         <div className="relative z-20 max-w-[64%] px-6 pt-28 md:max-w-[55%] md:px-12 md:pt-32 lg:max-w-none lg:pt-36">
           <p className="eyebrow">Registros que contam histórias</p>
-          <h1 className="mt-3 text-3xl font-semibold leading-[1.05] sm:text-4xl md:text-5xl">
+          <h1 className="mt-3 text-2xl font-semibold leading-[1.05] sm:text-4xl md:text-5xl">
             Tavares<br />Pranviatmann<br /><span className="text-primary">Santos - SP</span>
           </h1>
           <p className="mt-4 max-w-xs text-sm text-foreground/85">
