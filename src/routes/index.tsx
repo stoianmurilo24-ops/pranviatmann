@@ -106,7 +106,7 @@ export function Index() {
       </header>
 
       {/* HERO */}
-      <section id="inicio" className="relative min-h-[640px] md:min-h-[600px]">
+      <section id="inicio" className="relative min-h-[560px] lg:min-h-[600px]">
         <div className="absolute inset-0">
           {[
             [photos[4], "left-[38%] top-[14%] w-40 -rotate-12"],
@@ -115,12 +115,12 @@ export function Index() {
             [photos[3], "right-[-2%] top-[46%] w-40 rotate-6"],
             [photos[2], "left-[30%] top-[62%] w-28 rotate-3 opacity-60"],
           ].map(([src, pos], i) => (
-            <img key={i} src={src} alt="" className={`absolute hidden aspect-[4/5] rounded-sm object-cover opacity-70 shadow-2xl md:block ${pos}`} />
+            <img key={i} src={src} alt="" className={`absolute hidden aspect-[4/5] rounded-sm object-cover opacity-70 shadow-2xl lg:block ${pos}`} />
           ))}
         </div>
-        <img src={tavares} alt="Tavares Pranviatmann" className="absolute top-14 left-1/2 z-10 h-[340px] w-auto -translate-x-1/2 object-contain md:top-auto md:bottom-0 md:left-[55%] md:h-[88%]" />
+        <img src={tavares} alt="Tavares Pranviatmann" className="absolute right-[-10%] top-24 z-10 h-[340px] w-auto object-contain sm:right-0 md:top-16 md:h-[520px] lg:top-auto lg:right-auto lg:bottom-0 lg:left-[55%] lg:h-[88%]" />
         <div className="hero-fade absolute inset-0 z-10" />
-        <div className="relative z-20 px-6 pt-[400px] md:px-12 md:pt-36">
+        <div className="relative z-20 max-w-[64%] px-6 pt-28 md:max-w-[55%] md:px-12 md:pt-32 lg:max-w-none lg:pt-36">
           <p className="eyebrow">Registros que contam histórias</p>
           <h1 className="mt-3 text-4xl font-semibold leading-[1.05] md:text-5xl">
             Tavares<br />Pranviatmann<br /><span className="text-primary">Santos - SP</span>
