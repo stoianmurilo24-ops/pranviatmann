@@ -8,7 +8,7 @@ export function Logo({ small, href = "#inicio" }: { small?: boolean; href?: stri
       <span className={`font-logo mt-1 tracking-[0.18em] ${small ? "text-2xl" : "text-base"}`}>
         PRANVIATMANN 
       </span>
-      <span className="mt-0.5 text-[0.65rem] tracking-[0.35em] text-muted-foreground">
+      <span className="mt-0.5 text-[0.50rem] tracking-[0.35em] text-muted-foreground">
         Foto & Film
       </span>
     </a>
