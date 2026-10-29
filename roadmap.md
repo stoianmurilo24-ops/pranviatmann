@@ -1,0 +1,11 @@
+# Roadmap
+- [x] Mover Tavares para a esquerda no hero do celular/tablet
+- [ ] Site estático: index.html único + assets/ + README (entregue em Arquivos)
+  - nome: primeiro menor, sobrenome maior; menu fixo; âncoras; voltar ao topo
+  - links externos em nova aba; só 2 botões de WhatsApp
+  - cards de serviços e "Ver todos" levam à galeria filtrada
+  - FAQ abre/fecha, gerado de uma lista
+  - galerias por categoria (Casamentos, 15 anos, Formaturas, Gestantes) com filtro e ampliação
+  - só fotos reais; Formaturas aguardando fotos
+  - página 404 própria
+  - README: trocar fotos, adicionar fotos/categorias, editar FAQ, publicar, testar 404
