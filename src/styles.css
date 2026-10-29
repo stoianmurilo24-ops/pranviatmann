@@ -61,6 +61,8 @@
 @layer base {
   * { border-color: var(--color-border); }
   html { scroll-behavior: smooth; }
+  /* Menu fixo no topo: evita que ele cubra o título da seção ao clicar num link âncora. */
+  section[id] { scroll-margin-top: 4rem; }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);

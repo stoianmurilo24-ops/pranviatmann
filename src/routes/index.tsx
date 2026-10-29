@@ -1,10 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import {
-  Camera, Star, Heart, ShieldCheck, ArrowRight, ChevronLeft, ChevronRight,
+  Camera, Star, Heart, ShieldCheck, ArrowRight, ChevronUp,
   Plus, Menu, X, Instagram, MessageCircle,
 } from "lucide-react";
 import tavares from "@/assets/tavares.png";
+import { Logo } from "@/components/Logo";
+import { Lightbox } from "@/components/Lightbox";
+import { ALL_CATEGORIES, activeCategories, photosFor, resolveCategory } from "@/data/gallery";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -25,34 +28,33 @@ export const Route = createFileRoute("/")({
 
 const WA = "https://wa.me/5513991158252";
 const IG = "https://www.instagram.com/pranviatmann";
-const photos = [
-  "/images/p1.png",
-  "/images/p2.png",
-  "/images/p3.png",
-  "/images/p4.png",
-  "/images/p5.png",
-  "/images/p6.png",
-  "/images/p7.png",
-];
 
-function Logo({ small }: { small?: boolean }) {
-  return (
-    <a href="#inicio" className="flex flex-col items-center leading-none">
-      <Camera className={small ? "h-3.5 w-3.5" : "h-4 w-4"} strokeWidth={1.5} />
-      <span className={`font-logo mt-1 tracking-[0.18em] ${small ? "text-lg" : "text-xl"}`}>TAVARES</span>
-      <span className="mt-0.5 text-[0.45rem] tracking-[0.35em] text-muted-foreground">PRANVIATMANN</span>
-    </a>
-  );
-}
+// Links externos abrem em nova aba. "noopener noreferrer" impede que a página
+// aberta controle ou identifique este site (segurança).
+const EXTERNAL = { target: "_blank", rel: "noopener noreferrer" } as const;
+
+// Fotos decorativas do fundo da apresentação (só aparecem em telas grandes).
+const heroPhotos = [
+  ["/images/p5.png", "left-[38%] top-[14%] w-40 -rotate-12"],
+  ["/images/p6.png", "right-0 top-[8%] w-36 rotate-12"],
+  ["/images/p7.png", "right-[12%] top-[30%] w-36 -rotate-6"],
+  ["/images/p4.png", "right-[-2%] top-[46%] w-40 rotate-6"],
+  ["/images/p3.png", "left-[30%] top-[62%] w-28 rotate-3 opacity-60"],
+] as const;
 
 function WhatsBtn({ size = "md" }: { size?: "sm" | "md" }) {
   return (
-    <a href={WA} target="_blank" rel="noreferrer"
+    <a href={WA} {...EXTERNAL}
       className={`inline-flex items-center gap-2 rounded-full bg-primary font-semibold text-primary-foreground transition hover:brightness-110 ${size === "sm" ? "px-4 py-1.5 text-[0.7rem]" : "py-2 pl-4 pr-2 text-xs"}`}>
       <MessageCircle className="h-3.5 w-3.5" /> Falar no WhatsApp
       {size === "md" && <span className="grid h-6 w-6 place-items-center rounded-full bg-foreground text-background"><ArrowRight className="h-3 w-3" /></span>}
     </a>
   );
+}
+
+/** Clique "simples" (sem Ctrl/Cmd/Shift e com o botão principal). */
+function isPlainClick(e: MouseEvent) {
+  return e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey;
 }
 
 const nav = [["Início", "#inicio"], ["Serviços", "#servicos"], ["Sobre", "#sobre"], ["Avaliações", "#avaliacoes"], ["FAQ", "#faq"]];
@@ -64,11 +66,12 @@ const features = [
   [ShieldCheck, "Compromisso", "com seu momento"],
 ] as const;
 
+// [título, descrição, imagem do card, id da categoria na galeria (src/data/gallery.ts)]
 const services = [
-  ["Casamentos", "Amor em cada detalhe.", photos[1]],
-  ["Festa de 15 anos", "Sonhos que viram lembranças.", photos[0]],
-  ["Ensaio Fotografico", "Sua história, do seu jeito.", photos[2]],
-];
+  ["Casamentos", "Amor em cada detalhe.", "/images/p2.png", "casamentos"],
+  ["Festa de 15 anos", "Sonhos que viram lembranças.", "/images/p1.png", "15-anos"],
+  ["Ensaio Fotografico", "Sua história, do seu jeito.", "/images/p3.png", "ensaios"],
+] as const;
 
 const reviews = [
   ["Trabalho incrível! O Tavares conseguiu registrar cada detalhe do nosso casamento de forma perfeita. Super recomendo!", "Juliana e Marcos", "Casamento"],
@@ -86,23 +89,69 @@ const faqs = [
 export function Index() {
   const [open, setOpen] = useState(false);
   const [faq, setFaq] = useState<number | null>(null);
-  const [g, setG] = useState(0);
-  const gallery = [...photos.slice(g), ...photos.slice(0, g)].slice(0, 4);
+  const [category, setCategory] = useState<string>(ALL_CATEGORIES);
+  const [lightbox, setLightbox] = useState<number | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+  const [showTop, setShowTop] = useState(false);
+
+  // Botões de filtro: "Todos" + só as categorias que já têm fotos (src/data/gallery.ts).
+  const filters = [
+    { id: ALL_CATEGORIES, label: "Todos" },
+    ...activeCategories().map((c) => ({ id: c.id, label: c.label })),
+  ];
+  const gallery = photosFor(category);
+
+  // Menu fixo ganha fundo ao rolar; botão "voltar ao topo" aparece depois de rolar um pouco.
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 24);
+      setShowTop(window.scrollY > 600);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Esc fecha o menu do celular.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  // Seleciona uma categoria (ou "todos") e leva o visitante até a galeria.
+  function showGallery(id: string) {
+    setLightbox(null);
+    setCategory(resolveCategory(id));
+    document.getElementById("galeria")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function galleryLink(id: string) {
+    return {
+      href: "#galeria",
+      onClick: (e: MouseEvent) => {
+        if (!isPlainClick(e)) return;
+        e.preventDefault();
+        showGallery(id);
+      },
+    };
+  }
 
   return (
     <div className="mx-auto max-w-6xl overflow-hidden">
       {/* HEADER */}
-      <header className="absolute inset-x-0 top-0 z-30 mx-auto flex max-w-6xl items-center justify-between px-6 py-5 md:px-12">
+      <header className={`fixed inset-x-0 top-0 z-30 mx-auto flex max-w-6xl items-center justify-between border-b px-6 py-5 transition-colors duration-300 md:px-12 ${scrolled || open ? "bg-background/90 backdrop-blur" : "border-transparent"}`}>
         <Logo />
         <nav className="hidden gap-8 text-xs md:flex">
           {nav.map(([l, h]) => <a key={h} href={h} className="hover:text-primary">{l}</a>)}
         </nav>
         <div className="hidden md:block"><WhatsBtn size="sm" /></div>
-        <button className="md:hidden" onClick={() => setOpen(!open)} aria-label="Menu">
+        <button className="md:hidden" onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} aria-controls="menu-mobile">
           {open ? <X /> : <Menu />}
         </button>
         {open && (
-          <div className="absolute inset-x-4 top-20 flex flex-col gap-4 rounded-xl border bg-card p-6 text-sm md:hidden">
+          <div id="menu-mobile" className="absolute inset-x-4 top-20 flex flex-col gap-4 rounded-xl border bg-card p-6 text-sm md:hidden">
             {nav.map(([l, h]) => <a key={h} href={h} onClick={() => setOpen(false)}>{l}</a>)}
             <WhatsBtn size="sm" />
           </div>
@@ -112,27 +161,22 @@ export function Index() {
       {/* HERO */}
       <section id="inicio" className="relative min-h-[560px] lg:min-h-[600px]">
         <div className="absolute inset-0">
-          {[
-            [photos[4], "left-[38%] top-[14%] w-40 -rotate-12"],
-            [photos[5], "right-0 top-[8%] w-36 rotate-12"],
-            [photos[6], "right-[12%] top-[30%] w-36 -rotate-6"],
-            [photos[3], "right-[-2%] top-[46%] w-40 rotate-6"],
-            [photos[2], "left-[30%] top-[62%] w-28 rotate-3 opacity-60"],
-          ].map(([src, pos], i) => (
-            <img key={i} src={src} alt="" className={`absolute hidden aspect-[4/5] rounded-sm object-cover opacity-70 shadow-2xl lg:block ${pos}`} />
+          {heroPhotos.map(([src, pos], i) => (
+            <img key={i} src={src} alt="" loading="lazy" decoding="async" className={`absolute hidden aspect-[4/5] rounded-sm object-cover opacity-70 shadow-2xl lg:block ${pos}`} />
           ))}
         </div>
         <img src={tavares} alt="Tavares Pranviatmann" className="absolute right-[8%] top-32 z-10 h-[340px] w-auto object-contain sm:top-24 sm:right-[9%] md:top-16 md:right-[10%] md:h-[520px] lg:top-auto lg:right-auto lg:bottom-0 lg:left-[55%] lg:h-[88%]" />
         <div className="hero-fade absolute inset-0 z-10" />
         <div className="relative z-20 max-w-[64%] px-6 pt-28 md:max-w-[55%] md:px-12 md:pt-32 lg:max-w-none lg:pt-36">
           <p className="eyebrow">Registros que contam histórias</p>
-          <h1 className="mt-3 text-2xl font-semibold leading-[1.05] sm:text-4xl md:text-5xl">
-            Tavares<br />Pranviatmann<br /><span className="text-primary">Santos - SP</span>
+          <h1 className="mt-3 font-semibold leading-[1.05]">
+            <span className="block text-lg font-medium sm:text-2xl md:text-3xl">Tavares</span>
+            <span className="block text-[1.6rem] sm:text-5xl lg:text-6xl">Pranviatmann</span>
+            <span className="block text-xl text-primary sm:text-4xl">Santos - SP</span>
           </h1>
           <p className="mt-4 max-w-xs text-sm text-foreground/85">
             Transformo momentos únicos em lembranças para toda a vida, com sensibilidade, técnica e um olhar real sobre cada detalhe.
           </p>
-          <div className="mt-6"><WhatsBtn /></div>
         </div>
         <div className="relative z-20 grid grid-cols-1 gap-4 px-6 py-10 md:grid-cols-4 md:px-12">
           {features.map(([Icon, t, s]) => (
@@ -152,12 +196,12 @@ export function Index() {
             <h2 className="mt-2 text-2xl font-semibold md:text-3xl">Nossos Serviços</h2>
             <p className="mt-2 max-w-xs text-xs text-muted-foreground">Cada momento é único. Por isso, ofereço um olhar especial para cada tipo de registro.</p>
           </div>
-          <a href="https://wa.me/5513991158252?text=Ol%C3%A1!%20Gostaria%20de%20conhecer%20os%20servi%C3%A7os%20dispon%C3%ADveis%20e%20saber%20mais%20sobre%20as%20op%C3%A7%C3%B5es%20e%20os%20valores." target="_blank" rel="noreferrer" className="inline-flex shrink-0 items-center gap-2 rounded-full border px-3 py-1 text-[0.6rem]">Ver todos os serviços <ArrowRight className="h-3 w-3" /></a>
+          <a {...galleryLink(ALL_CATEGORIES)} className="inline-flex shrink-0 items-center gap-2 rounded-full border px-3 py-1 text-[0.6rem]">Ver todos os serviços <ArrowRight className="h-3 w-3" /></a>
         </div>
         <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {services.map(([t, s, img]) => (
-            <a key={t} href={WA} className="group relative flex overflow-hidden rounded-lg border bg-card md:block">
-              <img src={img} alt={t} className="h-16 w-20 object-cover md:h-56 md:w-full" />
+          {services.map(([t, s, img, cat]) => (
+            <a key={t} {...galleryLink(cat)} className="group relative flex overflow-hidden rounded-lg border bg-card md:block">
+              <img src={img} alt={t} loading="lazy" decoding="async" className="h-16 w-20 object-cover md:h-56 md:w-full" />
               <div className="card-fade absolute inset-0 hidden md:block" />
               <div className="flex flex-1 items-center justify-between p-4 md:absolute md:inset-x-0 md:bottom-0">
                 <div><p className="text-sm font-medium">{t}</p><p className="text-[0.65rem] text-muted-foreground">{s}</p></div>
@@ -178,28 +222,33 @@ export function Index() {
           <h2 className="mt-2 text-2xl font-semibold">Tavares Pranviatmann</h2>
           <p className="mt-4 text-sm text-foreground/85">Sou o Tavares, fótografo em Santos - SP, e meu propósito é registrar o que realmente importa: pessoas, sentimentos e momentos que não se repetem.</p>
           <p className="mt-4 text-sm text-foreground/85">Com um olhar atento aos detalhes e muita dedicação, transformo cada clique em uma lembrança que dura para sempre.</p>
-          <div className="mt-6"><WhatsBtn /></div>
         </div>
       </section>
 
       {/* GALERIA */}
-      <section className="border-t px-6 py-14 md:px-12">
-        <div className="flex items-end justify-between">
-          <div>
-            <p className="eyebrow">Trabalhos</p>
-            <h2 className="mt-2 text-2xl font-semibold md:text-3xl">Galeria</h2>
-            <p className="mt-2 max-w-xs text-xs text-muted-foreground">Alguns registros que mostram o meu olhar sobre cada história.</p>
-          </div>
-          <div className="hidden gap-2 md:flex">
-            <button aria-label="Anterior" onClick={() => setG((g - 1 + photos.length) % photos.length)} className="grid h-7 w-7 place-items-center rounded-full border"><ChevronLeft className="h-3.5 w-3.5" /></button>
-            <button aria-label="Próximo" onClick={() => setG((g + 1) % photos.length)} className="grid h-7 w-7 place-items-center rounded-full border"><ChevronRight className="h-3.5 w-3.5" /></button>
-          </div>
+      <section id="galeria" className="border-t px-6 py-14 md:px-12">
+        <div>
+          <p className="eyebrow">Trabalhos</p>
+          <h2 className="mt-2 text-2xl font-semibold md:text-3xl">Galeria</h2>
+          <p className="mt-2 max-w-xs text-xs text-muted-foreground">Alguns registros que mostram o meu olhar sobre cada história.</p>
         </div>
-        <div className="no-scrollbar -mx-6 mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-3 md:mx-0 md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:px-0 md:pb-0">
-          {photos.map((src) => (
-            <img key={src} src={src} alt="Trabalho fotográfico" className={`aspect-[3/4] w-[58%] shrink-0 snap-center rounded-sm object-cover md:aspect-[4/3] md:w-full ${gallery.includes(src) ? "" : "md:hidden"}`} />
+        <div role="group" aria-label="Filtrar galeria por categoria" className="mt-6 flex flex-wrap gap-2">
+          {filters.map(({ id, label }) => (
+            <button key={id} type="button" aria-pressed={category === id} onClick={() => { setLightbox(null); setCategory(id); }}
+              className={`rounded-full border px-3 py-1 text-[0.65rem] transition ${category === id ? "border-primary bg-primary text-primary-foreground" : "hover:border-primary hover:text-primary"}`}>
+              {label}
+            </button>
           ))}
         </div>
+        <div key={category} className="no-scrollbar -mx-6 mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-3 md:mx-0 md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:px-0 md:pb-0">
+          {gallery.map((p, i) => (
+            <button key={p.src} type="button" onClick={() => setLightbox(i)} aria-label={`Ampliar foto: ${p.alt}`}
+              className="aspect-[3/4] w-[58%] shrink-0 cursor-zoom-in snap-center overflow-hidden rounded-sm md:aspect-[4/3] md:w-full">
+              <img src={p.src} alt={p.alt} loading="lazy" decoding="async" className="h-full w-full object-cover" />
+            </button>
+          ))}
+        </div>
+        <Lightbox photos={gallery} index={lightbox} onClose={() => setLightbox(null)} onChange={setLightbox} />
       </section>
 
       {/* AVALIAÇÕES */}
@@ -227,15 +276,14 @@ export function Index() {
           <p className="eyebrow">FAQ</p>
           <h2 className="mt-2 text-2xl font-semibold md:text-3xl">Dúvidas Frequentes</h2>
           <p className="mt-2 text-xs text-muted-foreground">Aqui estão as principais dúvidas sobre o meu trabalho.</p>
-          <div className="mt-6"><WhatsBtn /></div>
         </div>
         <div className="space-y-2">
           {faqs.map(([q, a], i) => (
             <div key={q} className="rounded-md border bg-card">
-              <button onClick={() => setFaq(faq === i ? null : i)} className="flex w-full items-center justify-between px-4 py-2.5 text-left text-[0.7rem]">
+              <button type="button" id={`faq-q-${i}`} aria-expanded={faq === i} aria-controls={`faq-a-${i}`} onClick={() => setFaq(faq === i ? null : i)} className="flex w-full items-center justify-between px-4 py-2.5 text-left text-[0.7rem]">
                 {q}<Plus className={`h-3 w-3 transition ${faq === i ? "rotate-45" : ""}`} />
               </button>
-              {faq === i && <p className="px-4 pb-3 text-[0.7rem] text-muted-foreground">{a}</p>}
+              {faq === i && <p id={`faq-a-${i}`} role="region" aria-labelledby={`faq-q-${i}`} className="px-4 pb-3 text-[0.7rem] text-muted-foreground">{a}</p>}
             </div>
           ))}
         </div>
@@ -249,14 +297,21 @@ export function Index() {
             {nav.map(([l, h]) => <a key={h} href={h}>{l}</a>)}
           </nav>
           <div className="flex items-center gap-5">
-            <a href={IG} target="_blank" rel="noreferrer" aria-label="Instagram" className="flex items-center gap-2 hover:text-primary"><Instagram className="h-4 w-4" /><span className="text-[0.65rem]">@pranviatmann</span></a>
-            <a href={WA} target="_blank" rel="noreferrer" aria-label="WhatsApp" className="hover:text-primary"><MessageCircle className="h-4 w-4" /></a>
+            <a href={IG} {...EXTERNAL} aria-label="Instagram" className="flex items-center gap-2 hover:text-primary"><Instagram className="h-4 w-4" /><span className="text-[0.65rem]">@pranviatmann</span></a>
+            <a href={WA} {...EXTERNAL} aria-label="WhatsApp" className="hover:text-primary"><MessageCircle className="h-4 w-4" /></a>
           </div>
         </div>
         <div className="mt-8 flex justify-between text-[0.6rem] text-muted-foreground">
           <span>© 2026 Tavares Pranviatmann. Todos os direitos reservados.</span><span>Santos - SP</span>
         </div>
       </footer>
+
+      {/* VOLTAR AO TOPO */}
+      <button type="button" aria-label="Voltar ao topo" aria-hidden={!showTop} tabIndex={showTop ? 0 : -1}
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        className={`fixed bottom-5 right-5 z-40 grid h-10 w-10 place-items-center rounded-full border bg-card/90 text-foreground shadow-lg backdrop-blur transition hover:border-primary hover:text-primary ${showTop ? "opacity-100" : "pointer-events-none opacity-0"}`}>
+        <ChevronUp className="h-4 w-4" />
+      </button>
     </div>
   );
 }
