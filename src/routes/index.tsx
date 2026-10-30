@@ -96,7 +96,7 @@ export function Index() {
   const [showTop, setShowTop] = useState(false);
 
   const gallery = category ? photosFor(category) : [];
-  const categoryCards = activeCategories().map((c) => ({ ...c, cover: c.photos[0]?.src, count: c.photos.length }));
+  const categoryCards = activeCategories().map((c) => ({ ...c, cover: c.cover ?? c.photos[0]?.src, count: c.photos.length }));
 
   // Menu fixo ganha fundo ao rolar; botão "voltar ao topo" aparece depois de rolar um pouco.
   useEffect(() => {
