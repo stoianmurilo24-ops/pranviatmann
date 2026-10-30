@@ -243,10 +243,9 @@ export function Index() {
         </div>
         <div key={category} className="no-scrollbar -mx-6 mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-3 md:mx-0 md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:px-0 md:pb-0">
           {gallery.map((p, i) => (
-            <button key={p.src} type="button" onClick={() => setLightbox(i)} aria-label={`Ampliar foto: ${p.alt}`}
-              className="w-[58%] shrink-0 snap-center md:w-full">
+            <div key={p.src} className="w-[58%] shrink-0 snap-center md:w-full">
               <TiltGalleryCard src={p.src} alt={p.alt} onClick={() => setLightbox(i)} />
-            </button>
+            </div>
           ))}
         </div>
         <Lightbox photos={gallery} index={lightbox} onClose={() => setLightbox(null)} onChange={setLightbox} />
