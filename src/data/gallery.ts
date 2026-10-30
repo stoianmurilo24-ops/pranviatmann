@@ -26,7 +26,7 @@ export type GalleryCategory = {
   id: string;
   /** Nome que aparece no botão de filtro. */
   label: string;
-  photos: PhotoEntry[];
+  photos: PhotoEntry[];\n  /** Capa escolhida para o card da categoria; se ausente, usa a primeira foto. */\n  cover?: string;
 };
 
 export type GalleryPhoto = {
