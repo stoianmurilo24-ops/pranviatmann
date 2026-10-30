@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, type MouseEvent } from "react";
 import {
-  Camera, Star, Heart, ShieldCheck, ArrowRight, ChevronUp,
+  Camera, Star, Heart, ShieldCheck, ArrowRight, ChevronUp, ChevronLeft,
   Plus, Menu, X, Instagram, MessageCircle,
 } from "lucide-react";
 import tavares from "@/assets/tavares.png";
@@ -90,7 +90,7 @@ const faqs = [
 export function Index() {
   const [open, setOpen] = useState(false);
   const [faq, setFaq] = useState<number | null>(null);
-  const [category, setCategory] = useState<string>(ALL_CATEGORIES);
+  const [category, setCategory] = useState<string | null>(null);
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [showTop, setShowTop] = useState(false);
@@ -100,7 +100,7 @@ export function Index() {
     { id: ALL_CATEGORIES, label: "Todos" },
     ...activeCategories().map((c) => ({ id: c.id, label: c.label })),
   ];
-  const gallery = photosFor(category);
+  const gallery = category ? photosFor(category) : [];\n  const categoryCards = activeCategories().map((c) => ({ ...c, cover: c.photos[0]?.src, count: c.photos.length }));
 
   // Menu fixo ganha fundo ao rolar; botão "voltar ao topo" aparece depois de rolar um pouco.
   useEffect(() => {
@@ -226,28 +226,53 @@ export function Index() {
         </div>
       </section>
 
-      {/* GALERIA */}
+      {/* GALERIA — cards por seção; as fotos só aparecem depois de abrir uma coleção. */}
       <section id="galeria" className="border-t px-6 py-14 md:px-12">
         <div>
           <p className="eyebrow">Trabalhos</p>
-          <h2 className="mt-2 text-2xl font-semibold md:text-3xl">Galeria</h2>
-          <p className="mt-2 max-w-xs text-xs text-muted-foreground">Alguns registros que mostram o meu olhar sobre cada história.</p>
+          <h2 className="mt-2 text-2xl font-semibold md:text-3xl">{category ? categoryCards.find((c) => c.id === category)?.label : "Galeria"}</h2>
+          <p className="mt-2 max-w-xs text-xs text-muted-foreground">
+            {category ? "Veja os registros desta coleção." : "Escolha uma seção para explorar todas as fotos disponíveis."}
+          </p>
         </div>
-        <div role="group" aria-label="Filtrar galeria por categoria" className="mt-6 flex flex-wrap gap-2">
-          {filters.map(({ id, label }) => (
-            <button key={id} type="button" aria-pressed={category === id} onClick={() => { setLightbox(null); setCategory(id); }}
-              className={`rounded-full border px-3 py-1 text-[0.65rem] transition ${category === id ? "border-primary bg-primary text-primary-foreground" : "hover:border-primary hover:text-primary"}`}>
-              {label}
+
+        {category ? (
+          <>
+            <button type="button" onClick={() => { setLightbox(null); setCategory(null); }}
+              className="mt-6 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs transition hover:border-primary hover:text-primary">
+              <ChevronLeft className="h-4 w-4" /> Voltar às seções
             </button>
-          ))}
-        </div>
-        <div key={category} className="no-scrollbar -mx-6 mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-3 md:mx-0 md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:px-0 md:pb-0">
-          {gallery.map((p, i) => (
-            <div key={p.src} className="w-[58%] shrink-0 snap-center md:w-full">
-              <TiltGalleryCard src={p.src} alt={p.alt} onClick={() => setLightbox(i)} />
+            <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
+              {gallery.map((p, i) => (
+                <div key={p.src} className="min-w-0">
+                  <TiltGalleryCard src={p.src} alt={p.alt} onClick={() => setLightbox(i)} />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </>
+        ) : (
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+            {categoryCards.map((c) => (
+              <button key={c.id} type="button" onClick={() => { setLightbox(null); setCategory(c.id); }}
+                className="group relative overflow-hidden rounded-lg border bg-card text-left transition hover:-translate-y-1 hover:border-primary hover:shadow-xl focus-visible:outline-2 focus-visible:outline-primary">
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <img src={c.cover} alt={c.label} loading="lazy" decoding="async"
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4 text-white">
+                    <div>
+                      <h3 className="text-base font-semibold">{c.label}</h3>
+                      <p className="mt-1 text-xs text-white/80">{c.count} {c.count === 1 ? "foto disponível" : "fotos disponíveis"}</p>
+                    </div>
+                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/60 transition group-hover:bg-white group-hover:text-black">
+                      <ArrowRight className="h-4 w-4" />
+                    </span>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
         <Lightbox photos={gallery} index={lightbox} onClose={() => setLightbox(null)} onChange={setLightbox} />
       </section>
 
