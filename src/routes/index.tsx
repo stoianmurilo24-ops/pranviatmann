@@ -124,7 +124,7 @@ export function Index() {
   // Seleciona uma categoria (ou "todos") e leva o visitante até a galeria.
   function showGallery(id: string) {
     setLightbox(null);
-    setCategory(resolveCategory(id));
+    setCategory(id === ALL_CATEGORIES ? null : resolveCategory(id));
     document.getElementById("galeria")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
