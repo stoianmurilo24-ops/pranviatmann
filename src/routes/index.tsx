@@ -7,6 +7,7 @@ import {
 import tavares from "@/assets/tavares.png";
 import { Logo } from "@/components/Logo";
 import { Lightbox } from "@/components/Lightbox";
+import { TiltGalleryCard } from "@/components/TiltGalleryCard";
 import { ALL_CATEGORIES, activeCategories, photosFor, resolveCategory } from "@/data/gallery";
 
 export const Route = createFileRoute("/")({
@@ -243,8 +244,8 @@ export function Index() {
         <div key={category} className="no-scrollbar -mx-6 mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-3 md:mx-0 md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:px-0 md:pb-0">
           {gallery.map((p, i) => (
             <button key={p.src} type="button" onClick={() => setLightbox(i)} aria-label={`Ampliar foto: ${p.alt}`}
-              className="aspect-[3/4] w-[58%] shrink-0 cursor-zoom-in snap-center overflow-hidden rounded-sm md:aspect-[4/3] md:w-full">
-              <img src={p.src} alt={p.alt} loading="lazy" decoding="async" className="h-full w-full object-cover" />
+              className="w-[58%] shrink-0 snap-center md:w-full">
+              <TiltGalleryCard src={p.src} alt={p.alt} onClick={() => setLightbox(i)} />
             </button>
           ))}
         </div>
