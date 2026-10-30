@@ -95,12 +95,8 @@ export function Index() {
   const [scrolled, setScrolled] = useState(false);
   const [showTop, setShowTop] = useState(false);
 
-  // Botões de filtro: "Todos" + só as categorias que já têm fotos (src/data/gallery.ts).
-  const filters = [
-    { id: ALL_CATEGORIES, label: "Todos" },
-    ...activeCategories().map((c) => ({ id: c.id, label: c.label })),
-  ];
-  const gallery = category ? photosFor(category) : [];\n  const categoryCards = activeCategories().map((c) => ({ ...c, cover: c.photos[0]?.src, count: c.photos.length }));
+  const gallery = category ? photosFor(category) : [];
+  const categoryCards = activeCategories().map((c) => ({ ...c, cover: c.photos[0]?.src, count: c.photos.length }));
 
   // Menu fixo ganha fundo ao rolar; botão "voltar ao topo" aparece depois de rolar um pouco.
   useEffect(() => {
