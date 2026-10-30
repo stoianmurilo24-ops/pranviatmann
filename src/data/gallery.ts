@@ -43,7 +43,11 @@ export const categories: GalleryCategory[] = [
   {
     id: "casamentos",
     label: "Casamentos",
-    photos: [{ src: "/images/p2.png" }, { src: "/images/p4.png" }, { src: "/images/p6.png" }],
+    photos: [
+      { src: "/images/p2.png", alt: "Casal durante a cerimônia de casamento" },
+      { src: "/images/p4.png", alt: "Detalhe da decoração e do bolo de casamento" },
+      { src: "/images/p6.png", alt: "Registro dos noivos com as alianças" },
+    ],
   },
   {
     id: "15-anos",
