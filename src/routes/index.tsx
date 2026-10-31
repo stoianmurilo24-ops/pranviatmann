@@ -253,7 +253,7 @@ export function Index() {
                 aria-label={`Abrir galeria de ${c.label}, com ${c.count} ${c.count === 1 ? "foto" : "fotos"}`}
                 className="group relative overflow-hidden rounded-lg border bg-card text-left transition hover:-translate-y-1 hover:border-primary hover:shadow-xl focus-visible:outline-2 focus-visible:outline-primary">
                 <div className="relative aspect-[4/3] overflow-hidden bg-[#e9e4dc] p-1.5">
-                  <div className={`grid h-full gap-1.5 ${c.preview.length === 3 ? "grid-cols-[1.65fr_1fr] grid-rows-2" : c.preview.length === 2 ? "grid-cols-2 grid-rows-1" : "grid-cols-1 grid-rows-1"}`}>
+                  <div className={`grid h-full gap-1.5 ${c.preview.length === 3 ? "grid-cols-[1.65fr_1fr] grid-rows-2" : c.preview.length === 2 ? "grid-cols-[1.65fr_1fr] grid-rows-1" : "grid-cols-1 grid-rows-1"}`}>
                     {c.preview.map((photo, index) => (
                       <div key={photo.src} className={`relative min-h-0 min-w-0 overflow-hidden bg-muted ${c.preview.length === 3 && index === 0 ? "row-span-2" : ""}`}>
                         <img src={photo.src} alt={photo.alt ?? c.label} loading="lazy" decoding="async"

@@ -28,15 +28,16 @@ export const categories: GalleryCategory[] = [
     id: "casamentos",
     label: "Casamentos",
     photos: [
-      { src: "/images/p2.png", alt: "Noivos juntos durante o casamento" },
+      { src: "/images/p6.png", alt: "Noivos segurando as alianças durante o casamento" },
       { src: "/images/p4.png", alt: "Detalhe floral da decoração do casamento" },
-      { src: "/images/p6.png", alt: "Momento do pedido e das alianças" },
+      { src: "/images/p2.png", alt: "Casal durante o registro do casamento ao ar livre" },
     ],
   },
   {
     id: "15-anos",
     label: "Festa de 15 anos",
     photos: [
+      { src: "/images/15-anos-noite.webp", alt: "Aniversariante em ensaio noturno com vestido vinho e coroa" },
       { src: "/images/p1.png", alt: "Aniversariante durante a festa de 15 anos" },
     ],
   },
@@ -44,9 +45,9 @@ export const categories: GalleryCategory[] = [
     id: "ensaios",
     label: "Ensaio Fotográfico",
     photos: [
+      { src: "/images/p7.png", alt: "Retrato da modelo junto a uma árvore" },
+      { src: "/images/p5.png", alt: "Retrato durante ensaio diante de um mural" },
       { src: "/images/p3.png", alt: "Casal em ensaio fotográfico ao ar livre" },
-      { src: "/images/p5.png", alt: "Retrato em cenário urbano" },
-      { src: "/images/p7.png", alt: "Retrato em ambiente natural" },
     ],
   },
   { id: "formaturas", label: "Formaturas", photos: [] },
