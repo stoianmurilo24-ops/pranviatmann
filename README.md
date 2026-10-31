@@ -156,7 +156,7 @@ const IG = "https://www.instagram.com/pranviatmann";
 Confirme o número e o perfil com o proprietário antes de trocar. O WhatsApp usa formato internacional, apenas números, sem espaços ou símbolos. A constante `WA` é reutilizada nos botões e no rodapé.
 
 ### SEO e compartilhamento
-Na configuração `head`, procure `title`, `description`, `og:title`, `og:description` e imagens de compartilhamento. Use informações verdadeiras e imagens existentes. Se mudar o domínio, revise URLs absolutas antigas. SEO não garante posição no Google.
+Na configuração `head`, procure `title`, `description`, `og:title`, `og:description` e imagens de compartilhamento. Use informações verdadeiras e imagens existentes. Se mudar o domínio, revise URLs absolutas antigas.
 
 ### Logo, cores e visual
 Os componentes estão em `src/components/`; estilos usam principalmente classes Tailwind. Localize a classe/componente, faça uma alteração limitada e teste contraste, foco, celular e desktop. Não faça redesign não solicitado. Antes de trocar logo, confira como o componente `Logo` carrega o recurso.
