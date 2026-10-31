@@ -8,7 +8,7 @@ import tavares from "@/assets/tavares.png";
 import { Logo } from "@/components/Logo";
 import { Lightbox } from "@/components/Lightbox";
 import { TiltGalleryCard } from "@/components/TiltGalleryCard";
-import { ALL_CATEGORIES, activeCategories, photosFor, resolveCategory } from "@/data/gallery";
+import { ALL_CATEGORIES, activeCategories, photosFor, previewPhotosFor, resolveCategory } from "@/data/gallery";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -96,7 +96,7 @@ export function Index() {
   const [showTop, setShowTop] = useState(false);
 
   const gallery = category ? photosFor(category) : [];
-  const categoryCards = activeCategories().map((c) => ({ ...c, cover: c.cover ?? c.photos[0]?.src, count: c.photos.length }));
+  const categoryCards = activeCategories().map((c) => ({ ...c, preview: previewPhotosFor(c), count: c.photos.length }));
 
   // Menu fixo ganha fundo ao rolar; botão "voltar ao topo" aparece depois de rolar um pouco.
   useEffect(() => {
@@ -250,15 +250,22 @@ export function Index() {
           <div className="mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             {categoryCards.map((c) => (
               <button key={c.id} type="button" onClick={() => { setLightbox(null); setCategory(c.id); }}
+                aria-label={`Abrir galeria de ${c.label}, com ${c.count} ${c.count === 1 ? "foto" : "fotos"}`}
                 className="group relative overflow-hidden rounded-lg border bg-card text-left transition hover:-translate-y-1 hover:border-primary hover:shadow-xl focus-visible:outline-2 focus-visible:outline-primary">
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <img src={c.cover} alt={c.label} loading="lazy" decoding="async"
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4 text-white">
+                <div className="relative aspect-[4/3] overflow-hidden bg-[#e9e4dc] p-1.5">
+                  <div className={`grid h-full gap-1.5 ${c.preview.length === 3 ? "grid-cols-[1.65fr_1fr] grid-rows-2" : c.preview.length === 2 ? "grid-cols-2 grid-rows-1" : "grid-cols-1 grid-rows-1"}`}>
+                    {c.preview.map((photo, index) => (
+                      <div key={photo.src} className={`relative min-h-0 min-w-0 overflow-hidden bg-muted ${c.preview.length === 3 && index === 0 ? "row-span-2" : ""}`}>
+                        <img src={photo.src} alt={photo.alt ?? c.label} loading="lazy" decoding="async"
+                          className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="pointer-events-none absolute inset-1.5 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4 text-white">
                     <div>
                       <h3 className="text-base font-semibold">{c.label}</h3>
-                      <p className="mt-1 text-xs text-white/80">{c.count} {c.count === 1 ? "foto disponível" : "fotos disponíveis"}</p>
+                      <p className="mt-1 text-xs text-white/85">{c.count} {c.count === 1 ? "foto disponível" : "fotos disponíveis"}</p>
                     </div>
                     <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/60 transition group-hover:bg-white group-hover:text-black">
                       <ArrowRight className="h-4 w-4" />
