@@ -1,6 +1,7 @@
 /**
  * Galeria organizada por categoria.
- * Uma categoria só aparece quando possui fotos reais cadastradas.
+ * Cada card usa até três fotos do próprio álbum como miniatura.
+ * O álbum continua exibindo todas as fotos cadastradas para a categoria.
  */
 export type PhotoEntry = {
   src: string;
@@ -11,8 +12,6 @@ export type GalleryCategory = {
   id: string;
   label: string;
   photos: PhotoEntry[];
-  /** Capa exclusiva do card, independente da primeira foto do álbum. */
-  cover?: string;
 };
 
 export type GalleryPhoto = {
@@ -28,31 +27,26 @@ export const categories: GalleryCategory[] = [
   {
     id: "casamentos",
     label: "Casamentos",
-    cover: "/images/portfolio/capa-casamentos.webp",
     photos: [
-      { src: "/images/portfolio/capa-casamentos.webp", alt: "Noivos em um beijo durante o casamento" },
-      { src: "/images/p2.png", alt: "Casal durante a cerimônia de casamento" },
-      { src: "/images/p4.png", alt: "Detalhe da decoração e do bolo de casamento" },
-      { src: "/images/p6.png", alt: "Registro dos noivos com as alianças" },
+      { src: "/images/p2.png", alt: "Noivos juntos durante o casamento" },
+      { src: "/images/p4.png", alt: "Detalhe floral da decoração do casamento" },
+      { src: "/images/p6.png", alt: "Momento do pedido e das alianças" },
     ],
   },
   {
     id: "15-anos",
     label: "Festa de 15 anos",
-    cover: "/images/portfolio/capa-15-anos.webp",
     photos: [
-      { src: "/images/portfolio/capa-15-anos.webp", alt: "Aniversariante em seu salão de festa iluminado" },
       { src: "/images/p1.png", alt: "Aniversariante durante a festa de 15 anos" },
     ],
   },
   {
     id: "ensaios",
     label: "Ensaio Fotográfico",
-    cover: "/images/p5.png",
     photos: [
-      { src: "/images/p3.png", alt: "Registro de ensaio fotográfico" },
-      { src: "/images/p5.png", alt: "Registro de ensaio fotográfico" },
-      { src: "/images/p7.png", alt: "Registro de ensaio fotográfico" },
+      { src: "/images/p3.png", alt: "Casal em ensaio fotográfico ao ar livre" },
+      { src: "/images/p5.png", alt: "Retrato em cenário urbano" },
+      { src: "/images/p7.png", alt: "Retrato em ambiente natural" },
     ],
   },
   { id: "formaturas", label: "Formaturas", photos: [] },
@@ -64,7 +58,12 @@ export function activeCategories(list: GalleryCategory[] = categories): GalleryC
   return list.filter((category) => category.photos.length > 0);
 }
 
-/** Fotos correspondentes à categoria selecionada. */
+/** Até três fotos para a miniatura; o álbum não usa este limite. */
+export function previewPhotosFor(category: GalleryCategory): PhotoEntry[] {
+  return category.photos.slice(0, 3);
+}
+
+/** Fotos correspondentes à categoria selecionada, sem limite de quantidade. */
 export function photosFor(
   categoryId: string,
   list: GalleryCategory[] = categories,
