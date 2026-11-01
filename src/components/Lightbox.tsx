@@ -4,10 +4,14 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import type { GalleryPhoto } from "@/data/gallery";
 
 type LightboxProps = {
-  /** Fotos da categoria que está sendo exibida na galeria. */
+  /** Fotos exclusivas da coleção selecionada. */
   photos: GalleryPhoto[];
   /** Índice da foto aberta; `null` = fechado. */
   index: number | null;
+  /** Nome do serviço ou trabalho exibido. */
+  title: string;
+  /** Texto opcional para aparecer abaixo da foto quando ela não tiver legenda própria. */
+  description?: string;
   onClose: () => void;
   onChange: (index: number) => void;
 };
@@ -20,7 +24,7 @@ const roundBtn =
  * Fecha com o botão X, tecla Esc ou clique fora da foto.
  * Troca de foto com as setas, as teclas ← → ou deslizando o dedo.
  */
-export function Lightbox({ photos, index, onClose, onChange }: LightboxProps) {
+export function Lightbox({ photos, index, title, description, onClose, onChange }: LightboxProps) {
   const current = index === null ? undefined : photos[index];
   const isOpen = current !== undefined;
   const total = photos.length;
@@ -84,7 +88,7 @@ export function Lightbox({ photos, index, onClose, onChange }: LightboxProps) {
       ref={dialogRef}
       role="dialog"
       aria-modal="true"
-      aria-label="Foto ampliada"
+      aria-label={title || "Foto ampliada"}
       className="animate-in fade-in-0 fixed inset-0 z-50 flex items-center justify-center bg-black/90 duration-200"
       onClick={(e) => {
         // Clique no fundo (fora da foto e dos botões) fecha.
@@ -129,9 +133,14 @@ export function Lightbox({ photos, index, onClose, onChange }: LightboxProps) {
           alt={current.alt}
           className="max-h-[80dvh] max-w-full rounded-sm object-contain shadow-2xl"
         />
-        <figcaption className="mt-3 text-[0.65rem] text-muted-foreground">
-          {current.categoryLabel} · {index + 1} / {total}
+        <figcaption className="mt-3 text-center text-[0.65rem] text-muted-foreground">
+          {title} · {index + 1} / {total}
         </figcaption>
+        {(current.caption || description) && (
+          <p className="mt-2 max-w-2xl text-center text-sm text-white/85">
+            {current.caption ?? description}
+          </p>
+        )}
       </figure>
 
       {total > 1 && (
