@@ -288,8 +288,8 @@ export function Index() {
       <footer className="border-t px-6 py-10 md:px-12">
         <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between">
           <Logo small />
-          <nav className="hidden gap-8 text-[0.65rem] md:flex">
-            {nav.map(([l, h]) => <a key={h} href={h}>{l}</a>)}
+          <nav aria-label="Navegação do rodapé" className="flex flex-wrap justify-center gap-x-5 gap-y-3 text-[0.65rem]">
+            {nav.map(([l, h]) => <a key={h} href={h} className="transition hover:text-primary">{l}</a>)}
           </nav>
           <div className="flex items-center gap-5">
             <a href={IG} {...EXTERNAL} aria-label="Instagram" className="flex items-center gap-2 hover:text-primary"><Instagram className="h-4 w-4" /><span className="text-[0.65rem]">@pranviatmann</span></a>
