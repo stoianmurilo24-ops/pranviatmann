@@ -68,14 +68,12 @@ export const portfolioAlbums: PhotoCollection[] = [
   {
     id: "casamento-daiana-rodrigo",
     label: "Casamento — Daiana & Rodrigo",
-    description: "Álbum individual do casamento de Daiana e Rodrigo.",
     cover: "/images/galeria/casamento-daiana-rodrigo/casamento-daiana-rodrigo-01.webp",
     photos: makePhotos("/images/galeria/casamento-daiana-rodrigo", "casamento-daiana-rodrigo", 9, "Casamento de Daiana e Rodrigo"),
   },
   {
     id: "debutante-vitoria",
     label: "Debutante Vitória",
-    description: "Álbum individual da festa de Vitória.",
     cover: "/images/galeria/debutante-vitoria/debutante-vitoria-01.webp",
     photos: makePhotos("/images/galeria/debutante-vitoria", "debutante-vitoria", 8, "Debutante Vitória"),
   },
