@@ -39,21 +39,21 @@ export const serviceCollections: PhotoCollection[] = [
     id: "casamentos",
     label: "Casamentos",
     description: "Fotografia de casamentos e cerimônias.",
-    cover: "/images/servicos/casamentos/casamento-cida-wagner-01.webp",
+    cover: "/images/servicos/casamentos/casamento-cida-wagner-03.webp",
     photos: makePhotos("/images/servicos/casamentos", "casamento-cida-wagner", 8, "Casamento de Cida e Wagner"),
   },
   {
     id: "festas-15-anos",
     label: "Festas de 15 anos",
     description: "Fotografia de festas e celebrações de 15 anos.",
-    cover: "/images/servicos/festas-15-anos/festa-15-anos-maria-eduarda-01.webp",
+    cover: "/images/servicos/festas-15-anos/festa-15-anos-maria-eduarda-08.webp",
     photos: makePhotos("/images/servicos/festas-15-anos", "festa-15-anos-maria-eduarda", 9, "Festa de 15 anos de Maria Eduarda"),
   },
   {
     id: "ensaios",
     label: "Ensaios fotográficos",
     description: "Ensaio fotográfico de Andreia e Maicon.",
-    cover: "/images/servicos/ensaios/ensaio-andreia-maicon-01.webp",
+    cover: "/images/servicos/ensaios/ensaio-andreia-maicon-04.webp",
     photos: makePhotos(
       "/images/servicos/ensaios",
       "ensaio-andreia-maicon",
@@ -68,13 +68,13 @@ export const portfolioAlbums: PhotoCollection[] = [
   {
     id: "casamento-daiana-rodrigo",
     label: "Casamento — Daiana & Rodrigo",
-    cover: "/images/galeria/casamento-daiana-rodrigo/casamento-daiana-rodrigo-01.webp",
+    cover: "/images/galeria/casamento-daiana-rodrigo/casamento-daiana-rodrigo-03.webp",
     photos: makePhotos("/images/galeria/casamento-daiana-rodrigo", "casamento-daiana-rodrigo", 9, "Casamento de Daiana e Rodrigo"),
   },
   {
     id: "debutante-vitoria",
     label: "Debutante Vitória",
-    cover: "/images/galeria/debutante-vitoria/debutante-vitoria-01.webp",
+    cover: "/images/galeria/debutante-vitoria/debutante-vitoria-06.webp",
     photos: makePhotos("/images/galeria/debutante-vitoria", "debutante-vitoria", 8, "Debutante Vitória"),
   },
 ];
