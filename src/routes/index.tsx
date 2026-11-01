@@ -91,7 +91,8 @@ export function Index() {
 
   function openCollection(collection: PhotoCollection) {
     setSelectedCollection(collection);
-    setLightboxIndex(0);
+    const coverIndex = collection.photos.findIndex((photo) => photo.src === collection.cover);
+    setLightboxIndex(coverIndex >= 0 ? coverIndex : 0);
   }
 
   return (
