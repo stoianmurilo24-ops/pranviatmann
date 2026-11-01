@@ -1,95 +1,80 @@
 /**
- * Galeria organizada por categoria.
- * Cada card usa até três fotos do próprio álbum como miniatura.
- * O álbum continua exibindo todas as fotos cadastradas para a categoria.
+ * Coleções independentes: Serviços e Portfólio.
+ * Cada cartão exibe somente a primeira foto (capa) e abre diretamente o Lightbox.
+ * As fotos de cada coleção são exclusivas e não são repetidas entre as áreas.
  */
-export type PhotoEntry = {
-  src: string;
-  alt?: string;
-};
-
-export type GalleryCategory = {
-  id: string;
-  label: string;
-  photos: PhotoEntry[];
-};
-
 export type GalleryPhoto = {
   src: string;
   alt: string;
-  categoryId: string;
-  categoryLabel: string;
+  /** Legenda opcional por foto. Exemplo preenchido no primeiro registro do ensaio. */
+  caption?: string;
 };
 
-export const ALL_CATEGORIES = "todos";
+export type PhotoCollection = {
+  id: string;
+  label: string;
+  description?: string;
+  cover: string;
+  photos: GalleryPhoto[];
+};
 
-export const categories: GalleryCategory[] = [
+const makePhotos = (
+  base: string,
+  prefix: string,
+  count: number,
+  label: string,
+  firstCaption?: string,
+): GalleryPhoto[] =>
+  Array.from({ length: count }, (_, index) => {
+    const number = String(index + 1).padStart(2, "0");
+    return {
+      src: `${base}/${prefix}-${number}.webp`,
+      alt: `${label} — foto ${index + 1}`,
+      ...(index === 0 && firstCaption ? { caption: firstCaption } : {}),
+    };
+  });
+
+export const serviceCollections: PhotoCollection[] = [
   {
     id: "casamentos",
     label: "Casamentos",
-    photos: [
-      { src: "/images/p6.png", alt: "Noivos segurando as alianças durante o casamento" },
-      { src: "/images/p4.png", alt: "Detalhe floral da decoração do casamento" },
-      { src: "/images/p2.png", alt: "Casal durante o registro do casamento ao ar livre" },
-    ],
+    description: "Fotografia de casamentos e cerimônias.",
+    cover: "/images/servicos/casamentos/casamento-cida-wagner-01.webp",
+    photos: makePhotos("/images/servicos/casamentos", "casamento-cida-wagner", 8, "Casamento de Cida e Wagner"),
   },
   {
-    id: "15-anos",
-    label: "Festa de 15 anos",
-    photos: [
-      { src: "/images/15-anos-noite.webp", alt: "Aniversariante em ensaio noturno com vestido vinho e coroa" },
-      { src: "/images/p1.png", alt: "Aniversariante durante a festa de 15 anos" },
-    ],
+    id: "festas-15-anos",
+    label: "Festas de 15 anos",
+    description: "Fotografia de festas e celebrações de 15 anos.",
+    cover: "/images/servicos/festas-15-anos/festa-15-anos-maria-eduarda-01.webp",
+    photos: makePhotos("/images/servicos/festas-15-anos", "festa-15-anos-maria-eduarda", 9, "Festa de 15 anos de Maria Eduarda"),
   },
   {
     id: "ensaios",
-    label: "Ensaio Fotográfico",
-    photos: [
-      { src: "/images/p7.png", alt: "Retrato da modelo junto a uma árvore" },
-      { src: "/images/p5.png", alt: "Retrato durante ensaio diante de um mural" },
-      { src: "/images/p3.png", alt: "Casal em ensaio fotográfico ao ar livre" },
-    ],
+    label: "Ensaios fotográficos",
+    description: "Ensaio fotográfico de Andreia e Maicon.",
+    cover: "/images/servicos/ensaios/ensaio-andreia-maicon-01.webp",
+    photos: makePhotos(
+      "/images/servicos/ensaios",
+      "ensaio-andreia-maicon",
+      10,
+      "Ensaio de Andreia e Maicon",
+      "Ensaio fotográfico de Andreia e Maicon.",
+    ),
   },
-  { id: "formaturas", label: "Formaturas", photos: [] },
-  { id: "gestantes", label: "Gestantes", photos: [] },
 ];
 
-/** Categorias que possuem ao menos uma foto. */
-export function activeCategories(list: GalleryCategory[] = categories): GalleryCategory[] {
-  return list.filter((category) => category.photos.length > 0);
-}
-
-/** Até três fotos para a miniatura; o álbum não usa este limite. */
-export function previewPhotosFor(category: GalleryCategory): PhotoEntry[] {
-  return category.photos.slice(0, 3);
-}
-
-/** Fotos correspondentes à categoria selecionada, sem limite de quantidade. */
-export function photosFor(
-  categoryId: string,
-  list: GalleryCategory[] = categories,
-): GalleryPhoto[] {
-  const active = activeCategories(list);
-  const selected = categoryId === ALL_CATEGORIES
-    ? active
-    : active.filter((category) => category.id === categoryId);
-  const chosen = selected.length > 0 ? selected : active;
-  return chosen.flatMap((category) =>
-    category.photos.map((photo) => ({
-      src: photo.src,
-      alt: photo.alt ?? `Trabalho fotográfico — ${category.label}`,
-      categoryId: category.id,
-      categoryLabel: category.label,
-    })),
-  );
-}
-
-/** Evita selecionar categorias sem fotos ou inexistentes. */
-export function resolveCategory(
-  categoryId: string,
-  list: GalleryCategory[] = categories,
-): string {
-  return activeCategories(list).some((category) => category.id === categoryId)
-    ? categoryId
-    : ALL_CATEGORIES;
-}
+export const portfolioAlbums: PhotoCollection[] = [
+  {
+    id: "casamento-daiana-rodrigo",
+    label: "Casamento — Daiana & Rodrigo",
+    cover: "/images/galeria/casamento-daiana-rodrigo/casamento-daiana-rodrigo-01.webp",
+    photos: makePhotos("/images/galeria/casamento-daiana-rodrigo", "casamento-daiana-rodrigo", 9, "Casamento de Daiana e Rodrigo"),
+  },
+  {
+    id: "debutante-vitoria",
+    label: "Debutante Vitória",
+    cover: "/images/galeria/debutante-vitoria/debutante-vitoria-01.webp",
+    photos: makePhotos("/images/galeria/debutante-vitoria", "debutante-vitoria", 8, "Debutante Vitória"),
+  },
+];

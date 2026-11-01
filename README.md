@@ -131,16 +131,9 @@ Os exemplos refletem a estrutura atual; procure o trecho antes de alterar.
 Em `src/routes/index.tsx`, procure textos como “Registros que contam histórias”, “Transformo momentos únicos…” e “Sou o Tavares…”. Troque somente o conteúdo textual e preserve a sintaxe.
 
 ### Serviços
-Procure a constante `services`. Cada linha representa título, descrição, imagem e id da categoria:
+As categorias ficam em `serviceCollections`, em `src/data/gallery.ts`. Cada coleção tem um identificador, título, descrição opcional, uma única imagem de capa e uma lista de fotos. O cartão abre diretamente o visualizador daquela categoria; não navega até a seção Galeria.
 
-```tsx
-// [título, descrição, imagem do card, id da categoria]
-const services = [
-  ["Casamentos", "Amor em cada detalhe.", "/images/p2.png", "casamentos"],
-];
-```
-
-Ao criar serviço, confirme que o id existe em `src/data/gallery.ts`. Não invente serviços ou promessas sem aprovação.
+Ao criar ou editar serviço, mantenha as fotos exclusivas daquela coleção e atualize os caminhos das imagens conforme as pastas extraídas em `public/images/servicos/`. Não invente serviços ou promessas sem aprovação.
 
 ### Avaliações e FAQ
 Procure `reviews` e `faqs` no mesmo arquivo. Avaliações devem ser reais e autorizadas; não invente depoimentos, nomes ou estrelas. Mantenha respostas do FAQ verdadeiras, especialmente prazo, disponibilidade e serviços.
@@ -163,29 +156,24 @@ Os componentes estão em `src/components/`; estilos usam principalmente classes 
 
 ## 6. Galeria e imagens
 
-### Adicionar foto
-1. Confirme autorização de uso.
-2. Use nome simples, sem espaços/acentos, como `ensaio-jardim-01.webp`.
-3. Coloque em `public/images/`.
-4. Edite `src/data/gallery.ts` e adicione à categoria certa.
-5. Informe caminho iniciado em `/images/` e texto alt descritivo.
-6. Teste miniatura e foto aberta.
+### Organização das imagens
+As imagens são separadas entre:
+- `public/images/servicos/<categoria>/`: fotos usadas nos visualizadores das categorias de serviço;
+- `public/images/galeria/<trabalho>/`: fotos usadas nos álbuns individuais do portfólio.
 
-Exemplo:
+Cada cartão exibe somente o arquivo definido em `cover`. Ao clicar, o visitante abre diretamente o visualizador com as fotos daquela coleção. O visualizador possui setas, navegação por teclado e gesto de deslizar no celular. Nunca repita a mesma fotografia entre Serviços e Portfólio.
 
-```ts
-{ src: "/images/ensaio-jardim-01.webp", alt: "Retrato em um jardim" }
-```
+O pacote inicial entregue ao projeto chama-se `site-fotos.zip` e fica na raiz do repositório. O comando `prebuild` executa `scripts/extract-photo-bundle.mjs` e extrai o conteúdo para `public/images/` antes da build. Não coloque o ZIP dentro de `public/`.
 
-Alt descreve a foto; não é para empilhar palavras-chave. Imagem decorativa pode usar alt vazio se apropriado.
+Para incluir mais fotos:
+1. Confirme autorização de uso e a qual categoria/álbum pertence.
+2. Use nome simples, sem espaços/acentos, com numeração sequencial.
+3. Atualize o ZIP mantendo as pastas `servicos/` e `galeria/` e substitua o arquivo na raiz.
+4. Atualize a lista de fotos e o caminho da capa em `src/data/gallery.ts`.
+5. Garanta que a imagem não esteja cadastrada em outra coleção.
+6. Teste a capa, o visualizador e as setas.
 
-### Categorias e prévias
-Cada categoria contém:
-- `id`: identificador técnico único;
-- `label`: nome visível;
-- `photos`: fotos cadastradas.
-
-Os cartões mostram até três fotos de prévia; ao abrir, a categoria mostra todas as fotos. Categorias vazias não aparecem como ativas. Ao adicionar categoria, use id único e confirme a ligação com o serviço. Ao remover foto, procure referências e caminhos quebrados.
+O texto alternativo descreve o conteúdo da foto. A propriedade `caption` é opcional para exibir uma legenda específica abaixo de uma foto; `description` é um texto opcional de apoio da coleção.
 
 WebP costuma ser adequado para fotografias comprimidas; PNG pode servir para transparência. Preserve originais fora da pasta de build e confira cortes em celular e desktop. A lógica de cartões com uma, duas ou três fotos fica em `src/routes/index.tsx`; teste os três cenários se alterar o layout.
 
