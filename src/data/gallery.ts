@@ -45,7 +45,7 @@ export const serviceCollections: PhotoCollection[] = [
     description: "Ensaios fotográficos.",
     cover: "/images/p7.png",
     photos: [
-      { src: "/images/p7.png", alt: "Ensaio fotográfico — foto 1", caption: "Exemplo de legenda: escreva aqui os detalhes deste ensaio." },
+      { src: "/images/p7.png", alt: "Ensaio fotográfico — foto 1", caption: "Ensaios Fotográficos." },
       { src: "/images/p5.png", alt: "Ensaio fotográfico — foto 2" },
       { src: "/images/p3.png", alt: "Ensaio fotográfico — foto 3" },
     ],
