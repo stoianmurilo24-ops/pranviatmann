@@ -127,11 +127,11 @@ export function Lightbox({ photos, index, title, description, onClose, onChange 
         </button>
       )}
 
-      <figure className="flex max-h-full max-w-full flex-col items-center px-4 py-16 md:px-24">
+      <figure className="flex h-full w-full max-w-[1600px] flex-col items-center justify-center px-3 py-16 md:px-16">
         <img
           src={current.src}
           alt={current.alt}
-          className="max-h-[80dvh] max-w-full rounded-sm object-contain shadow-2xl"
+          className="h-[82dvh] w-full max-w-full rounded-sm object-contain shadow-2xl md:h-[86dvh]"
         />
         <figcaption className="mt-3 text-center text-[0.65rem] text-muted-foreground">
           {title} · {index + 1} / {total}
